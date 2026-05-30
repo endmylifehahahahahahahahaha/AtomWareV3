@@ -136,7 +136,11 @@ else
     writefile('newvape/main.lua', '--This watermark is used to delete the file if its cached, remove it to make the file persist after vape updates.\n' .. mainSrc)
 end
 
-return loadstring(mainSrc, 'main')({
+local mainFunc, loadErr = loadstring(mainSrc)
+if not mainFunc then
+    error('[AtomWare] Failed to load main.lua: ' .. tostring(loadErr))
+end
+return mainFunc({
     Username = shared.ValidatedUsername,
     Password = _args and _args.Password or nil
 })
